@@ -4,7 +4,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-class wordOfTheDay_v1 {
+class MerriamWebster {
 
     static String getWordOfTheDay() {
         try {
@@ -18,7 +18,7 @@ class wordOfTheDay_v1 {
 
     private static String summarizeWordOfTheDay(Document wordOfTheDayDocument) {
         String wordOfTheDayDate = getWordDate(wordOfTheDayDocument);
-        String wordOfTheDay = getTodaysWord(wordOfTheDayDocument);
+        String wordOfTheDay = getWord(wordOfTheDayDocument);
         String wordAttributes = getWordAttributes(wordOfTheDayDocument);
         String definition = getDefinition(wordOfTheDayDocument);
         return wordOfTheDayDate + wordOfTheDay + wordAttributes + definition;
@@ -30,17 +30,17 @@ class wordOfTheDay_v1 {
         return wordDate.substring(18);
     }
 
-    private static String getTodaysWord(Document wordOfTheDayDocument) {
-        String wordTitle = wordOfTheDayDocument.title();
-        wordTitle = wordTitle.substring(0, wordTitle.length() - 18); //Remove " | Merriam Webster"
-        return "\nMerriam-Webster " + wordTitle;
+    private static String getWord(Document wordOfTheDayDocument) {
+        String word = wordOfTheDayDocument.title();
+        word = word.substring(17, word.length() - 18).toUpperCase();
+        return "\nMerriam-Webster's word of the day: " + word;
     }
 
     private static String getWordAttributes(Document wordOfTheDayDocument) {
-        Elements mainAttributeElement = wordOfTheDayDocument.select("span.getWordOfTheDay-attr");
+        Elements mainAttributeElement = wordOfTheDayDocument.select("span.main-attr");
         String mainAttribute = mainAttributeElement.text();
         Elements wordSyllablesElement = wordOfTheDayDocument.select("span.word-syllables");
-        String wordSyllables = wordSyllablesElement.text();
+        String wordSyllables = wordSyllablesElement.text().toLowerCase();
         return "\n" + mainAttribute + " | " + wordSyllables;
     }
 
