@@ -5,4 +5,4 @@ Upon execution, Merilio will automatically send you today's word of the day if t
 
 This will work for all Twilio plans, including trial plans. To sign up for a Twilio account, visit https://www.twilio.com/
 
-*Trial plans only allow SMS messaging for one verified phone number.
+*Twilio trial plans only allow SMS messaging for one verified phone number.
