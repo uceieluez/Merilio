@@ -50,16 +50,17 @@ class MerriamWebster {
         String[] parsedDefinitions = parseDefinitions(wordOfTheDayDocument);
         int i = 1;
         for (String definition : parsedDefinitions) {
-            String[] parsedSubDefinitions = parseSubDefinitions(definition);
-            if (parsedSubDefinitions.length > 1) {
-                for (String subDefinition : parsedSubDefinitions) {
-                    subDefinition = formatSubDefinitions(subDefinition);
-                    subDefinition = "\n" + i + "." + subDefinition;
-                    definitionBody.append(subDefinition);
+            String[] definitionList = splitConnectedDefinitions(definition);
+            if (definitionList.length > 1) {
+                for (String connectedDefinition : definitionList) {
+                    connectedDefinition = formatSubDefinitions(connectedDefinition);
+                    connectedDefinition = "\n" + i + "." + connectedDefinition;
+                    definitionBody.append(connectedDefinition);
                     i++;
                 }
                 continue;
             }
+            definition = formatSubDefinitions(definition);
             definition = "\n" + i + "." + definition;
             definitionBody.append(definition);
             i++;
@@ -68,20 +69,22 @@ class MerriamWebster {
     }
 
     private static String[] parseDefinitions(Document wordOfTheDayDocument) {
-        String definitionContainer = parseDefinitionContainer(wordOfTheDayDocument);
-        String definitionBody = removeDidYouKnowFooter(definitionContainer);
+        String definitionBodyWithFooter = removeDefinitionHeader(wordOfTheDayDocument);
+        String definitionBody = removeDidYouKnowFooter(definitionBodyWithFooter);
         String definitionListRegex = "\\d\\s\\W";
         Pattern definitionListPattern = Pattern.compile(definitionListRegex);
         return definitionListPattern.split(definitionBody);
     }
 
-    private static String parseDefinitionContainer(Document wordOfTheDayDocument) {
+    private static String removeDefinitionHeader(Document wordOfTheDayDocument) {
         Elements definitionContainerElement = wordOfTheDayDocument.select("div.wod-definition-container");
         String definitionContainer = definitionContainerElement.text();
-        if (definitionContainer.substring(0, 12).equals("Definition :")) {
-            return definitionContainer.substring(12);
+        if (definitionContainer.substring(0, 14).equals("Definition 1 :")) {
+            definitionContainer = definitionContainer.substring(14);
+        } else {
+            definitionContainer = definitionContainer.substring(12);
         }
-        return definitionContainer.substring(14);
+        return definitionContainer;
     }
 
     private static String removeDidYouKnowFooter(String definitionContainer) {
@@ -91,7 +94,7 @@ class MerriamWebster {
         return parsedDefinitionContainer[0];
     }
 
-    private static String[] parseSubDefinitions(String definition) {
+    private static String[] splitConnectedDefinitions(String definition) {
         String subDefinitionRegex = "\\s\\d";
         Pattern subDefinitionPattern = Pattern.compile(subDefinitionRegex);
         return subDefinitionPattern.split(definition);
