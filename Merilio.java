@@ -46,7 +46,7 @@ public class Merilio {
     }
 
     private static void waitForStartTime() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(3);
         System.out.println(new Date() + ":");
         System.out.println("Waiting until entered start time to begin...\n");
         String currentTime = getCurrentHourAndMinute();
