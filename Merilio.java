@@ -26,7 +26,7 @@ public class Merilio {
     private static void textWordOfTheDayOnceIfAfterStartTime(MyTwilio myTwilioAccount) throws InterruptedException {
         if (checkIfAfterStartTime()) {
             textWordOfTheDayOnce(myTwilioAccount);
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(8);
             System.out.println("--------------------------------------------------\n");
             System.out.println(new Date() + ":");
             System.out.println("Next text message will be sent out at regular start time.\n");
@@ -46,7 +46,7 @@ public class Merilio {
     }
 
     private static void waitForStartTime() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(10);
         System.out.println(new Date() + ":");
         System.out.println("Waiting until entered start time to begin...\n");
         String currentTime = getCurrentHourAndMinute();
@@ -71,6 +71,6 @@ public class Merilio {
         System.out.println(new Date() + ":");
         System.out.println("Text messages will now be regularly sent at scheduled start time.\n");
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(myTwilioAccount, 1, 86400, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(myTwilioAccount, 0, 86400, TimeUnit.SECONDS);
     }
 }
