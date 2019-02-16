@@ -9,13 +9,16 @@ class MyTwilio implements Runnable {
     private final String myAuthToken;
     private final String myTwilioNumber;
     private final String[] recipientPhoneNumbers;
-    private String wordOfTheDay = MerriamWebster.getWordOfTheDay();
 
     MyTwilio(String account_SID, String authToken, String twilioNumber, String[] recipients) {
         this.myAccount_SID = account_SID;
         this.myAuthToken = authToken;
         this.myTwilioNumber = twilioNumber;
         this.recipientPhoneNumbers = recipients;
+    }
+
+    private static String getWordOfTheDay(){
+        return MerriamWebster.getWordOfTheDay();
     }
 
     private void sendTextMessage(String recipientNumber, String newMessage) {
@@ -27,6 +30,7 @@ class MyTwilio implements Runnable {
     }
 
     private void textWordOfTheDay() {
+        String wordOfTheDay = getWordOfTheDay();
         for (String recipient : recipientPhoneNumbers) {
             sendTextMessage(recipient, wordOfTheDay);
         }
@@ -35,6 +39,7 @@ class MyTwilio implements Runnable {
     @Override
     public void run() {
         try {
+            String wordOfTheDay = getWordOfTheDay();
             textWordOfTheDay();
             System.out.println("--------------------------------------------------\n");
             System.out.println("Text message sent on " + new Date() + ":\n");
